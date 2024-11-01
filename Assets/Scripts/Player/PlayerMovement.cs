@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     public void Move()
     {
+        //movement control Using WASD each key move within X or Y axis
         float inputX = 0;
         float inputY = 0;
 
@@ -50,19 +51,21 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 targetVelocity = moveDirection * maxSpeed;
 
-        if(moveDirection != Vector2.zero){
+        if(moveDirection != Vector2.zero){//vector2.zero == 0,0
             rb.velocity = Vector2.MoveTowards(rb.velocity, targetVelocity, moveVelocity.magnitude * Time.fixedDeltaTime);
         }
         else{
             rb.velocity = Vector2.MoveTowards(rb.velocity, Vector2.zero, stopFriction.magnitude * Time.fixedDeltaTime);
         }
 
+        //limit rb velocity with Mathf.clamp
         rb.velocity = new Vector2(
             Mathf.Clamp(rb.velocity.x, -stopClamp.x, stopClamp.x), 
             Mathf.Clamp(rb.velocity.y, -stopClamp.y, stopClamp.y)
         );
     }
 
+    //GetFriction
     public Vector2 GetFriction()
     {
         if(moveDirection != Vector2.zero){

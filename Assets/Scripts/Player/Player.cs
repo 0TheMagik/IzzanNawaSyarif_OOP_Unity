@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     PlayerMovement playerMovement;
     Animator animator;
 
+    //singleton untuk memastikan hanya ada satu objek saja yang ada 
     void Awake()
     {
         if(instance == null)
