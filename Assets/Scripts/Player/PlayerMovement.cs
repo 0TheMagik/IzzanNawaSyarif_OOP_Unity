@@ -15,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     Vector2 stopFriction;
     Rigidbody2D rb;
 
+    [SerializeField] Vector2 Vertical_Boundary;
+    [SerializeField] Vector2 Horizontal_Boundary;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
             Mathf.Clamp(rb.velocity.x, -stopClamp.x, stopClamp.x), 
             Mathf.Clamp(rb.velocity.y, -stopClamp.y, stopClamp.y)
         );
+
+        MoveBound();
     }
 
     //GetFriction
@@ -79,6 +84,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void MoveBound()
     {
+        //ubah di unity sesuaikan variabel horizontal   =   horizontal X->horizontal 
+        //ubah di unity sesuaikan variabel vertical     =   Vertical   Y->vertical
+        rb.position = new Vector2(
+            Mathf.Clamp(rb.position.x, -Horizontal_Boundary.x, Horizontal_Boundary.x), 
+            Mathf.Clamp(rb.position.y, -Vertical_Boundary.y, Vertical_Boundary.y)
+        );
 
     }
 
