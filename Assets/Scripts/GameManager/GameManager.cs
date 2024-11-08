@@ -10,17 +10,15 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
-        Instance = this;
-        DontDestroyOnLoad(gameObject); // Persist across scenes
 
-        // Find the LevelManager in the scene
-        LevelManager = FindObjectOfType<LevelManager>();
-        if (LevelManager == null)
-        {
-            Debug.LogError("LevelManager not found in the scene!");
-        }
+        Instance = this;
+
+        LevelManager = GetComponentInChildren<LevelManager>();
+
+        DontDestroyOnLoad(GameObject.Find("Camera"));
+        DontDestroyOnLoad(GameObject.Find("Player"));
     }
 }

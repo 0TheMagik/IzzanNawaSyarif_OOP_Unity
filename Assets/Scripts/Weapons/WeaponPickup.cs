@@ -25,6 +25,8 @@ public class WeaponPickup : MonoBehaviour
     {
         if(other.CompareTag("Player")){
             weapon.transform.SetParent(other.transform);
+            //memosisikan senjata dibawah player
+            weapon.transform.localPosition = Vector3.zero;
             TurnVisual(true);
             Debug.Log("Trigger");
         }

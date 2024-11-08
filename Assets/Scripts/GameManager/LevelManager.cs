@@ -8,29 +8,25 @@ public class LevelManager : MonoBehaviour
     [SerializeField] Animator animator;
     void Awake()
     {
-        if (GameManager.LevelManager != null && GameManager.LevelManager != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
         DontDestroyOnLoad(gameObject);
     }
     
     IEnumerator LoadSceneAsync(string sceneName)
     {
+        if (SceneManager.GetActiveScene().name == "ChooseWeapon")
+        {
+            yield break; 
+        }
+
         if (animator != null)
         {
             animator.SetTrigger("StartTransition");
+            Debug.Log("transisi jalan");
         }
-
-        // Wait for the animation to finish (adjust time as needed)
+        
         yield return new WaitForSeconds(1f);
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main");
 
         if (animator != null)
         {
@@ -40,6 +36,8 @@ public class LevelManager : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        StartCoroutine(LoadSceneAsync(sceneName));
+        StartCoroutine(LoadSceneAsync("Main"));
     }
 }
+
+
