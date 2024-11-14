@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance {get; private set;}
-    public static LevelManager LevelManager {get; private set;}
+    public static GameManager Instance { get; private set; }
+
+    public LevelManager LevelManager { get; private set; }
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
         LevelManager = GetComponentInChildren<LevelManager>();
 
+        DontDestroyOnLoad(gameObject);
         DontDestroyOnLoad(GameObject.Find("Camera"));
         DontDestroyOnLoad(GameObject.Find("Player"));
     }

@@ -1,43 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Singleton
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] Animator animator;
+
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        animator.enabled = false;
     }
-    
+
     IEnumerator LoadSceneAsync(string sceneName)
     {
-        if (SceneManager.GetActiveScene().name == "ChooseWeapon")
-        {
-            yield break; 
-        }
+        animator.enabled = true;
 
-        if (animator != null)
-        {
-            animator.SetTrigger("StartTransition");
-            Debug.Log("transisi jalan");
-        }
-        
-        yield return new WaitForSeconds(1f);
+        // animator.SetTrigger("startTransition");
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main");
+        yield return new WaitForSeconds(1);
 
-        if (animator != null)
-        {
-            animator.SetTrigger("EndTransition");
-        }
+        SceneManager.LoadSceneAsync(sceneName);
+
+        animator.SetTrigger("EndTransition");
+
+        Player.instance.transform.position = new(0, -4.5f);
     }
 
     public void LoadScene(string sceneName)
     {
-        StartCoroutine(LoadSceneAsync("Main"));
+        StartCoroutine(LoadSceneAsync(sceneName));
     }
 }
-
-
