@@ -1,58 +1,44 @@
+using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
     [Header("Bullet Stats")]
-    public float bulletSpeed = 20f;
+    public float bulletSpeed = 20;
     public int damage = 10;
 
     private Rigidbody2D rb;
-    private IObjectPool<Bullet> pool;
+
+    public IObjectPool<Bullet> objectPool;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void SetPool(IObjectPool<Bullet> bulletPool)
+    private void FixedUpdate()
     {
-        pool = bulletPool;
+        rb.velocity = bulletSpeed * Time.deltaTime * transform.up;
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        rb.velocity = transform.up * bulletSpeed;
-    }
+        Vector2 ppos = Camera.main.WorldToViewportPoint(transform.position);
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        var hitbox = collision.GetComponent<HitboxComponent>();
-        if (hitbox != null)
+        if (ppos.y >= 1.01f || ppos.y <= -0.01f && objectPool != null)
         {
-            hitbox.Damage(damage);
-            ReturnToPool();
-        }
-        else
-        {
-            ReturnToPool();
+            objectPool.Release(this);
         }
     }
 
-    private void OnDisable()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        rb.velocity = Vector2.zero;
-    }
-
-    private void ReturnToPool()
-    {
-        if (pool != null)
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            pool.Release(this);
-        }
-        else
-        {
-            gameObject.SetActive(false);
+            other.gameObject.GetComponent<HitboxComponent>().Damage(this);
+            objectPool.Release(this);
         }
     }
 }

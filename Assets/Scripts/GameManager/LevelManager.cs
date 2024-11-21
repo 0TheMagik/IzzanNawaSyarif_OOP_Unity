@@ -16,15 +16,13 @@ public class LevelManager : MonoBehaviour
     {
         animator.enabled = true;
 
-        // animator.SetTrigger("startTransition");
-
         yield return new WaitForSeconds(1);
 
         SceneManager.LoadSceneAsync(sceneName);
 
-        animator.SetTrigger("EndTransition");
+        animator.SetTrigger("endTransition");
 
-        Player.instance.transform.position = new(0, -4.5f);
+        Player.Instance.transform.position = new(0, -4.5f);
     }
 
     public void LoadScene(string sceneName)

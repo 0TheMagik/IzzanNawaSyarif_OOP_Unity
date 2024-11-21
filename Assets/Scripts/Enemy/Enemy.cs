@@ -1,14 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    public int level;
+  [SerializeField] protected int level;
 
-    protected virtual void Awake()
+  public UnityEvent enemyKilledEvent;
+    internal Action<Enemy> OnDeath;
+
+    private void Start()
+  {
+    enemyKilledEvent ??= new UnityEvent();
+  }
+
+  public void SetLevel(int level)
+  {
+    this.level = level;
+  }
+
+  public int GetLevel()
+  {
+    return level;
+  }
+
+  private void OnDestroy()
+  {
+    enemyKilledEvent.Invoke();
+  }
+
+    internal void SetCombatManager(CombatManager combatManager)
     {
-        // Base setup
+        throw new NotImplementedException();
     }
 }
-
