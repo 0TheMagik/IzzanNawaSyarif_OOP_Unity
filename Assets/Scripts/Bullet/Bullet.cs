@@ -25,12 +25,12 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        Vector2 ppos = Camera.main.WorldToViewportPoint(transform.position);
+        //Vector2 ppos = Camera.main.WorldToViewportPoint(transform.position);
 
-        if (ppos.y >= 1.01f || ppos.y <= -0.01f && objectPool != null)
-        {
-            objectPool.Release(this);
-        }
+        //if (ppos.y >= 1.01f || ppos.y <= -0.01f && objectPool != null)
+        //{
+        //    objectPool.Release(this);
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D other)

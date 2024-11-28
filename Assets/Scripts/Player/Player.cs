@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
 
         // Get Animator components
-        animator = GameObject.Find("EngineEffects").GetComponent<Animator>();
+        animator = GameObject.Find("EngineEffect").GetComponent<Animator>();
     }
 
     // Using FixedUpdate to Move because of physics
