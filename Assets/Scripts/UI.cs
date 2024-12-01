@@ -1,68 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class UI : MonoBehaviour
+public class GameUIManager : MonoBehaviour
 {
-    // UI Elements
-    public Text healthText;
-    public Text pointsText;
-    public Text waveText;
-    public Text enemiesText;
+    public int playerHealth = 100;
+    public int playerPoints = 0;
+    public int currentWave = 1;
+    public int enemiesInWave = 0;
 
-    // Game variables
-    private int playerHealth = 100;
-    private int playerPoints = 0;
-    private int currentWave = 1;
-    private int enemiesInWave = 5;
+    private Label healthLabel;
+    private Label pointsLabel;
+    private Label waveLabel;
+    private Label enemiesLabel;
 
-    // Enemy data
-    public class Enemy
+    private void Start()
     {
-        public int level;
-        public Enemy(int level)
+        // Ambil referensi root VisualElement dari UI Toolkit
+        var root = GetComponent<UIDocument>().rootVisualElement;
+
+        // Hubungkan elemen UI dengan variabel
+        healthLabel = root.Q<Label>("HealthText");
+        pointsLabel = root.Q<Label>("PointsText");
+        waveLabel = root.Q<Label>("WaveText");
+        enemiesLabel = root.Q<Label>("EnemiesText");
+
+        // Update UI pada awal permainan
+        UpdateUI();
+    }
+
+    public void UpdateHealth(int healthChange)
+    {
+        playerHealth += healthChange;
+        UpdateUI();
+    }
+
+    public void AddPoints(int enemyLevel, int numberOfEnemies)
+    {
+        playerPoints += enemyLevel * numberOfEnemies;
+        UpdateUI();
+    }
+
+    public void UpdateWave(int newWave, int enemyCount)
+    {
+        currentWave = newWave;
+        enemiesInWave = enemyCount;
+        UpdateUI();
+    }
+
+    public void EnemyDefeated()
+    {
+        if (enemiesInWave > 0)
         {
-            this.level = level;
-        }
-    }
-
-    void Start()
-    {
-        // Initialize UI
-        UpdateUI();
-    }
-
-    public void PlayerTakesDamage(int damage)
-    {
-        playerHealth -= damage;
-        if (playerHealth < 0) playerHealth = 0;
-        UpdateUI();
-    }
-
-    public void PlayerKillsEnemy(Enemy enemy)
-    {
-        playerPoints += enemy.level; // Points based on enemy level
-        enemiesInWave--;
-        if (enemiesInWave <= 0)
-        {
-            StartNewWave();
+            enemiesInWave--;
         }
         UpdateUI();
-    }
-
-    private void StartNewWave()
-    {
-        currentWave++;
-        enemiesInWave = currentWave * 5; // Example logic: 5 enemies per wave
     }
 
     private void UpdateUI()
     {
-        healthText.text = "Health: " + playerHealth;
-        pointsText.text = "Points: " + playerPoints;
-        waveText.text = "Wave: " + currentWave;
-        enemiesText.text = "Enemies: " + enemiesInWave;
+        // Perbarui nilai teks pada UI Toolkit
+        healthLabel.text = $"Health: {playerHealth}";
+        pointsLabel.text = $"Points: {playerPoints}";
+        waveLabel.text = $"Wave: {currentWave}";
+        enemiesLabel.text = $"Enemies: {enemiesInWave}";
     }
 }
-
